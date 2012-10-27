@@ -975,6 +975,9 @@ static int iter(unsigned long slot, void *key, void *val)
 {
 	VarFn *vf;
 	
+	(void)slot;
+	(void)key;
+	
 	vf = (VarFn*)val;
 	
 	if(vf == NULL)
@@ -985,27 +988,23 @@ static int iter(unsigned long slot, void *key, void *val)
 	return 0;
 }
 
-static int cust_func(int args, const double *arg, double *rv, void *data)
-{
-	if(eval((char*)data, rv))
-		return 1;
-	
-	return 0;
-}
-
 int main(int args, char *arg[])
 {
 	char buf[1001], *p;
-	int err, i;
+	int err;
 	double rv;
+	char* ret;
+	
+	(void)args;
+	(void)arg;
 	
 	do
 	{
 		printf("\n> ");
 		fflush(stdout);
 		buf[0] = '\0';
-		fgets(buf, 1000, stdin);
-		if(feof(stdin) || ferror(stdin))
+		ret = fgets(buf, 1000, stdin);
+		if(feof(stdin) || ferror(stdin) || ret == NULL)
 			break;
 		if(buf[strlen(buf)-1] == '\n')
 			buf[strlen(buf)-1] = '\0';
@@ -1022,7 +1021,7 @@ int main(int args, char *arg[])
 			printf("\t?               list all named vars and their values\n");
 			printf("\tQUIT/EXIT/DONE  end the program\n");
 			printf("\n\toperators: + - * / %% ^ ()\n");
-		}else if(p = strchr(buf, '='))
+		}else if((p = strchr(buf, '=')))
 		{ /* assign a value to a variable */
 			char *name, *expr;
 			
@@ -1039,7 +1038,7 @@ int main(int args, char *arg[])
 					printf(" - failed to set variable");
 				printf("\n");
 			}
-		}else if(p = strchr(buf, '?'))
+		}else if((p = strchr(buf, '?')))
 		{ /* print variable values */
 			char *name;
 			
