@@ -32,9 +32,7 @@ MKEXE=$(CC) $(CCOPTS) $(LNOPTS) -o
 MKLIB=$(AR) rcs $(LIBNAME).a
 MKDLL=$(CC) $(CCOPTS) $(SOOPTS) -o
 
-none:
-	@echo "no target specified, please choose one of:"
-	@echo "   clean, libs, test, backup, dist, install or remove"
+all: libs test
 
 clean:
 	@echo "deleting build products"
