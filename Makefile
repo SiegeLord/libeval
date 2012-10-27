@@ -41,6 +41,14 @@ clean:
 	@$(RM) *.o
 	@$(RM) $(EXES)
 	@$(RM) $(LIBS)
+	@$(RM) version_str.h
+	@$(RM) build_date.h
+	@$(RM) package_date.h
+
+veryclean: clean
+	@echo "returning directory to pristine state"
+	@$(RM) BUILD_DATE
+	@$(RM) PACKAGE_DATE
 
 libs: $(OBJS) bld-date
 	@echo "building libeval $(VER).$(REV).$(BLD) on $$(date)"
@@ -74,15 +82,15 @@ backup: clean pkg-date
 
 install: libs
 	@echo "installing libeval into $(INSTALLDIR)"
-	@$(INSTALL_SRC) eval.h $(INSTALLDIR)/include
-	@$(INSTALL_BIN) $(LIBNAME).a $(INSTALLDIR)/lib
-	@$(INSTALL_BIN) $(DLLNAMEVRB) $(INSTALLDIR)/lib
-	@$(RM) $(INSTALLDIR)/lib/$(DLLNAMEVR)
-	@$(RM) $(INSTALLDIR)/lib/$(DLLNAMEV)
-	@$(RM) $(INSTALLDIR)/lib/$(DLLNAME)
-	@$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAMEVR)
-	@$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAMEV)
-	@$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAME)
+	$(INSTALL_SRC) eval.h $(INSTALLDIR)/include
+	$(INSTALL_BIN) $(LIBNAME).a $(INSTALLDIR)/lib
+	$(INSTALL_BIN) $(DLLNAMEVRB) $(INSTALLDIR)/lib
+	$(RM) $(INSTALLDIR)/lib/$(DLLNAMEVR)
+	$(RM) $(INSTALLDIR)/lib/$(DLLNAMEV)
+	$(RM) $(INSTALLDIR)/lib/$(DLLNAME)
+	$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAMEVR)
+	$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAMEV)
+	$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAME)
 
 remove:
 	@echo "removing libeval v$(VER).$(REV).$(BLD)"
@@ -97,17 +105,20 @@ remove-all: remove
 	@echo "removing all revisions of libeval v$(VER)"
 	@$(RM) $(INSTALLDIR)/lib/$(LIBNAME).$(VER).*.so
 
-pkg-date:
+pkg-date: package_date.h
+package_date.h:
 	@echo "Libeval version $(VER).$(REV).$(BLD)" > PACKAGE_DATE
 	@echo "Copyright (C) 2006, 2007 Jeffrey S. Dutky" >> PACKAGE_DATE
 	@echo "Packaged on $$(date +%Y/%m/%d) at $$(date +%H:%M)" >> PACKAGE_DATE
 	@echo "static char *G_pkg_date = \"libeval pkg date: $$(date +%Y/%m/%d) at $$(date +%H:%M)\";" > package_date.h
 
-bld-date:
+bld-date: build_date.h
+build_date.h:
 	@echo "Libeval version $(VER).$(REV).$(BLD)" > BUILD_DATE
 	@echo "Copyright (C) 2006, 2007 Jeffrey S. Dutky" >> BUILD_DATE
 	@echo "Built on $$(date +%Y/%m/%d) at $$(date +%H:%M)" >> BUILD_DATE
 	@echo "static char *G_bld_date = \"libeval bld date: $$(date +%Y/%m/%d) at $$(date +%H:%M)\";" > build_date.h
 
-ver-str:
+ver-str: version_str.h
+version_str.h:
 	@echo "static char *G_vrb_str = \"libeval version: $(VER).$(REV).$(BLD)\";" > version_str.h
