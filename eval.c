@@ -42,23 +42,19 @@
 **   args = expr,args | expr
 */
 
-/*** a comment like this (starting with /***) indicates unimplemented stuff */
-
 static int G_version = VER;
 static int G_revision = REV;
 static int G_buildno = BLD;
 static char *G_copyright = "libeval Copyright (C) 2006, 2007  Jeffrey S. Dutky";
 static char *G_author = "libeval author: Jeffrey S. Dutky";
 static char *G_license = "libeval license: GNU Lesser General Public License (LGPL) v2.1";
-#include "version_str.h"
-#include "build_date.h"
-#include "package_date.h"
 
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #include <math.h>
 #include <limits.h>
+#include <stdio.h>
 
 #include "hashtable.h"
 #include "func.h"
@@ -88,7 +84,7 @@ static void *lalloc(size_t size)
 	void *ptr;
 	Node *n;
 	
-	DB(printf("-- lalloc(size=%d)\n", size));
+	DB(printf("-- lalloc(size=%zu)\n", size));
 	if(size > G_cur_data_size-G_cur_data_pos)
 	{ /* if there is not enough space in the current block */
 		if(size < MIN_ALLOC_SIZE)
@@ -96,7 +92,7 @@ static void *lalloc(size_t size)
 		else
 			asize = size+MIN_ALLOC_SIZE; /* alloc more than was asked for */
 		/* allocate a new block large enough to hold the requested amount */
-		DB(printf("-- lalloc new block %d bytes\n", asize));
+		DB(printf("-- lalloc new block %zu bytes\n", asize));
 		n = (Node*)malloc(sizeof(Node)+asize); /* alloc new block */
 		if(n == NULL)
 			return NULL; /* failed to alloc new block */
@@ -107,12 +103,12 @@ static void *lalloc(size_t size)
 		DB(printf("-- lalloc head block now %p\n", G_cur_node));
 		G_cur_data_pos = 0; /* alloc from start of new block */
 		G_cur_data_size = asize; /* alloc up to asize bytes from new block */
-		DB(printf("-- lalloc new block size %d bytes\n", G_cur_data_size));
+		DB(printf("-- lalloc new block size %zu bytes\n", G_cur_data_size));
 	}
 	ptr = G_cur_node->data+G_cur_data_pos; /* return pointer to current byte */
-	DB(printf("-- lalloc old data pos = %d\n", G_cur_data_pos));
+	DB(printf("-- lalloc old data pos = %zu\n", G_cur_data_pos));
 	G_cur_data_pos += size; /* move alloc pos forward by alloced length */
-	DB(printf("-- lalloc new data pos = %d\n", G_cur_data_pos));
+	DB(printf("-- lalloc new data pos = %zu\n", G_cur_data_pos));
 	DB(printf("-- lalloc ptr=%p\n", ptr));
 	
 	return ptr;
@@ -311,7 +307,6 @@ static char *copy_str(char *str, int lim)
 {
 	int len;
 	char *s;
-	struct node *n;
 	
 	DB(printf("-- copy_str(\"%s\", lim=%d)\n", str, lim));
 	len = strlen(str);
@@ -726,11 +721,12 @@ static double eval_fact(char *buf, int *pos) /* fact = item^fact | item */
 
 static double eval_item(char *buf, int *pos) /* item = -item | +item | int | var | (expr) */
 {
-	double rv = 0.0, lhs, rhs;
+	double rv = 0.0;
 	void *data;
-	int tlen, nargs, xargs, i;
+	int tlen, nargs, xargs;
+	DB(int i);
 	FunctionPtr fn;
-	char *fname;
+	DB(char *fname);
 	Token tok;
 	
 	DB(printf("-- eval_item(\"%s\", &pos=%p pos=%d)\n", buf+*pos, pos, *pos));
@@ -759,7 +755,7 @@ static double eval_item(char *buf, int *pos) /* item = -item | +item | int | var
 		xargs = nargs;
 		data = tok.data;
 		fn = tok.fn;
-		fname = tok.str;
+		DB(fname = tok.str);
 		tok = pull_token(buf, pos);
 		if(G_eval_error == 0)
 		{
@@ -850,7 +846,7 @@ static int eval_args(char *buf, int *pos, int *args, double **arg,
 	Token tok;
 	int i;
 	
-	DB(printf("-- eval_args(\"%s\", &pos=%p pos=%d, args=%d ,arg=%p, alen=%d apos=%d)\n",
+	DB(printf("-- eval_args(\"%s\", &pos=%p pos=%d, args=%p ,arg=%p, alen=%d apos=%d)\n",
 		buf+*pos, pos, *pos, args, arg, *arglen, argpos));
 	tok = pull_token(buf, pos);
 	push_token(tok);
@@ -943,7 +939,7 @@ int eval(char *expr, double *result)
 	return 0;
 }
 
-/* return information about the expression evaluator, copyright, auther, etc. */
+/* return information about the expression evaluator, copyright, author, etc. */
 void eval_info(int *version, int *revision, int *buildno,
 	char *authbuf, int authlim, char *copybuf, int copylim,
 	char *licebuf, int licelim)

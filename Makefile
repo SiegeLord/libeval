@@ -20,7 +20,7 @@ HDRS=eval.h func.h hashtable.h
 AR=ar
 RM=rm -f
 CC=gcc
-CCOPTS=-fPIC -DVER=$(VER) -DREV=$(REV) -DBLD=$(BLD)
+CCOPTS=-Wall -Wextra -O2 -g -fPIC -DVER=$(VER) -DREV=$(REV) -DBLD=$(BLD)
 LNOPTS=-lm
 SOOPTS=-shared -Wl,-soname,$(LIBNAME)
 INSTALL_SRC=install -D
@@ -39,9 +39,6 @@ clean:
 	@$(RM) *.o
 	@$(RM) $(EXES)
 	@$(RM) $(LIBS)
-	@$(RM) version_str.h
-	@$(RM) build_date.h
-	@$(RM) package_date.h
 
 veryclean: clean
 	@echo "returning directory to pristine state"
@@ -58,7 +55,7 @@ test: $(OBJS)
 	@echo "building test harness"
 	@$(MKEXE) $(TEST) -DEVAL_TEST $(SRCS) $(LNOPTS)
 
-eval.o: eval.c eval.h build_date.h package_date.h ver-str
+eval.o: eval.c eval.h package_date.h
 	@echo "building eval.o"
 	@$(MKOBJ) eval.c
 
@@ -108,15 +105,9 @@ package_date.h:
 	@echo "Libeval version $(VER).$(REV).$(BLD)" > PACKAGE_DATE
 	@echo "Copyright (C) 2006, 2007 Jeffrey S. Dutky" >> PACKAGE_DATE
 	@echo "Packaged on $$(date +%Y/%m/%d) at $$(date +%H:%M)" >> PACKAGE_DATE
-	@echo "static char *G_pkg_date = \"libeval pkg date: $$(date +%Y/%m/%d) at $$(date +%H:%M)\";" > package_date.h
 
 bld-date: build_date.h
 build_date.h:
 	@echo "Libeval version $(VER).$(REV).$(BLD)" > BUILD_DATE
 	@echo "Copyright (C) 2006, 2007 Jeffrey S. Dutky" >> BUILD_DATE
 	@echo "Built on $$(date +%Y/%m/%d) at $$(date +%H:%M)" >> BUILD_DATE
-	@echo "static char *G_bld_date = \"libeval bld date: $$(date +%Y/%m/%d) at $$(date +%H:%M)\";" > build_date.h
-
-ver-str: version_str.h
-version_str.h:
-	@echo "static char *G_vrb_str = \"libeval version: $(VER).$(REV).$(BLD)\";" > version_str.h

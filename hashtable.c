@@ -160,7 +160,7 @@ void ht_delete(hashtable *p_ht)
 {
 	struct hashbucket_struct *hbkt;
 	struct hashblock_struct *hblk, *hblkl;
-	int i;
+	size_t i;
 	
 	if(p_ht == NULL || p_ht->tag != HASHTABLE_TAG)
 		return;
@@ -270,7 +270,7 @@ static int lookup(hashtable *p_ht, void *p_key, void **p_val,
 	
 	hc = p_ht->hash(p_key); /* find the slot for this key */
 	hb = p_ht->table[hc%p_ht->size];
-	D(fprintf(stderr, "hb = table[%d] = %p\n", hc%p_ht->size, hb);
+	D(fprintf(stderr, "hb = table[%zu] = %p\n", hc%p_ht->size, hb);
 		fflush(stderr));
 	slot = &(p_ht->table[hc%p_ht->size]);
 	prev = NULL;
@@ -461,7 +461,7 @@ int ht_lookup(hashtable *p_ht, void *p_key, void **p_val)
 int ht_iterate(hashtable *p_ht, int (*p_func)(unsigned long slot,
 	void *key, void *val), int *p_rv)
 {
-	unsigned long i, n;
+	size_t i;
 	int rv = 0;
 	struct hashbucket_struct *hb;
 	
@@ -470,18 +470,18 @@ int ht_iterate(hashtable *p_ht, int (*p_func)(unsigned long slot,
 	if(p_ht == NULL || p_ht->tag != HASHTABLE_TAG)
 		return 1;
 	
-	D(fprintf(stderr, "ht->tag=%4.4s\n", &(p_ht->tag)); fflush(stderr));
+	D(fprintf(stderr, "ht->tag=%p\n", &(p_ht->tag)); fflush(stderr));
 	if(p_func == NULL)
 		return 0;
 	
-	D(fprintf(stderr, "%d slots\n", p_ht->size);fflush(stderr));
+	D(fprintf(stderr, "%zu slots\n", p_ht->size);fflush(stderr));
 	for(i = 0; i < p_ht->size; i++)
 	{ /* for each slot in the table, iterate over each bucket in the list */
-		D(fprintf(stderr, "\tslot #%d\n", i);fflush(stderr));
+		D(fprintf(stderr, "\tslot #%zu\n", i);fflush(stderr));
 		hb = p_ht->table[i];
 		while(hb != NULL)
 		{ /* iterate over the bucket list for this slot */
-			D(fprintf(stderr, "\t\tkey='%s' (%4.4s)\n", hb->key, &(hb->tag));
+			D(fprintf(stderr, "\t\tkey='%s' (%p)\n", (char*)hb->key, &(hb->tag));
 				fflush(stderr));
 			if(hb->tag != HASHBUCKET_TAG)
 				return 4;
@@ -499,11 +499,11 @@ int ht_iterate(hashtable *p_ht, int (*p_func)(unsigned long slot,
 	
 	for(i = 0; i < p_ht->old_size; i++)
 	{ /* for each slot in the old table, iterate over each bucket in the lsit */
-		D(fprintf(stderr, "\told slot #%d\n", i); fflush(stderr));
+		D(fprintf(stderr, "\told slot #%zu\n", i); fflush(stderr));
 		hb = p_ht->old_table[i];
 		while(hb != NULL)
 		{ /* iterate over the bucket list for this slot */
-			D(fprintf(stderr, "\t\tkey='%s' (%4.4s)\n", hb->key, &(hb->tag));
+			D(fprintf(stderr, "\t\tkey='%s' (%p)\n", (char*)hb->key, &(hb->tag));
 				fflush(stderr));
 			if(hb->tag != HASHBUCKET_TAG)
 				return 4;

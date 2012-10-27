@@ -34,12 +34,16 @@ static int dcompi(const void *v1, const void *v2)
 
 static FUNCTION(func_abs,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = fabs(arg[0]);
 	return 0;
 }
 
 static FUNCTION(func_int,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = (long)arg[0];
 	return 0;
 }
@@ -59,6 +63,9 @@ static FUNCTION(func_round,args,arg,rv,data)
 {
 	double x;
 	
+	(void)args;
+	(void)data;
+	
 	x = arg[0];
 	if(x <= -0.5)
 		*rv = ceil(x-0.5);
@@ -74,6 +81,9 @@ static FUNCTION(func_trunc,args,arg,rv,data)
 {
 	double x;
 	
+	(void)args;
+	(void)data;
+	
 	x = arg[0];
 	if(x <= 0.0)
 		*rv = ceil(x);
@@ -85,12 +95,16 @@ static FUNCTION(func_trunc,args,arg,rv,data)
 
 static FUNCTION(func_floor,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = floor(arg[0]);
 	return 0;
 }
 
 static FUNCTION(func_ceil,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = ceil(arg[0]);
 	return 0;
 }
@@ -98,18 +112,24 @@ static FUNCTION(func_ceil,args,arg,rv,data)
 
 static FUNCTION(func_sin,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = sin(arg[0]);
 	return 0;
 }
 
 static FUNCTION(func_cos,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = cos(arg[0]);
 	return 0;
 }
 
 static FUNCTION(func_tan,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = tan(arg[0]);
 	return 0;
 }
@@ -117,6 +137,8 @@ static FUNCTION(func_tan,args,arg,rv,data)
 
 static FUNCTION(func_asin,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	if(arg[0] < -1.0 || arg[0] > 1.0)
 		return 1;
 	*rv = asin(arg[0]);
@@ -125,6 +147,8 @@ static FUNCTION(func_asin,args,arg,rv,data)
 
 static FUNCTION(func_acos,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	if(arg[0] < -1.0 || arg[0] > 1.0)
 		return 1;
 	*rv = acos(arg[0]);
@@ -133,6 +157,8 @@ static FUNCTION(func_acos,args,arg,rv,data)
 
 static FUNCTION(func_atan,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = atan(arg[0]);
 	return 0;
 }
@@ -140,36 +166,48 @@ static FUNCTION(func_atan,args,arg,rv,data)
 
 static FUNCTION(func_sinh,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = sinh(arg[0]);
 	return 0;
 }
 
 static FUNCTION(func_cosh,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = cosh(arg[0]);
 	return 0;
 }
 
 static FUNCTION(func_tanh,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = tanh(arg[0]);
 	return 0;
 }
 
 static FUNCTION(func_asinh,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = asinh(arg[0]);
 	return 0;
 }
 
 static FUNCTION(func_acosh,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = acosh(arg[0]);
 	return 0;
 }
 
 static FUNCTION(func_atanh,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = atanh(arg[0]);
 	return 0;
 }
@@ -177,24 +215,32 @@ static FUNCTION(func_atanh,args,arg,rv,data)
 
 static FUNCTION(func_ln,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = log(arg[0]);
 	return 0;
 }
 
 static FUNCTION(func_exp,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = exp(arg[0]);
 	return 0;
 }
 
 static FUNCTION(func_log,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = log10(arg[0]);
 	return 0;
 }
 
 static FUNCTION(func_sqrt,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
 	*rv = sqrt(arg[0]);
 	return 0;
 }
@@ -202,8 +248,10 @@ static FUNCTION(func_sqrt,args,arg,rv,data)
 
 static FUNCTION(func_rand,args,arg,rv,data)
 {
+	(void)arg;
+	(void)args;
+	(void)data;
 	*rv = (double)rand()/(double)RAND_MAX;
-	
 	return 0;
 }
 
@@ -211,6 +259,8 @@ static FUNCTION(func_sum,args,arg,rv,data)
 {
 	int i;
 	double sum = 0.0;
+	
+	(void)data;
 	
 	qsort(arg, args, sizeof(double), dcompi);
 	for(i = 0; i < args; i++)
@@ -224,6 +274,8 @@ static FUNCTION(func_min,args,arg,rv,data)
 {
 	int i;
 	double min;
+	
+	(void)data;
 	
 	min = arg[0];
 	for(i = 1; i < args; i++)
@@ -239,6 +291,8 @@ static FUNCTION(func_max,args,arg,rv,data)
 	int i;
 	double max;
 	
+	(void)data;
+	
 	max = arg[0];
 	for(i = 1; i < args; i++)
 		if(arg[i] > max)
@@ -253,6 +307,8 @@ static FUNCTION(func_avg,args,arg,rv,data)
 	int n;
 	double sum = 0.0;
 	
+	(void)data;
+	
 	qsort(arg, args, sizeof(double), dcompi);
 	for(n = 0; n < args; n++)
 		sum += arg[n];
@@ -264,6 +320,8 @@ static FUNCTION(func_avg,args,arg,rv,data)
 /* return the median value */
 static FUNCTION(func_med,args,arg,rv,data)
 {
+	(void)data;
+	
 	qsort(arg, args, sizeof(double), dcomp);
 	if(args%2 == 0) /* even number, return average of middle values */
 		*rv = (arg[args/2-1]+arg[args/2])/2.0;
@@ -278,6 +336,8 @@ static FUNCTION(func_var,args,arg,rv,data)
 {
 	int n;
 	double sum = 0.0, sumsq = 0.0, avg = 0.0;
+	
+	(void)data;
 	
 	qsort(arg, args, sizeof(double), dcompi);
 	for(n = 0; n < args; n++)
@@ -310,6 +370,9 @@ static FUNCTION(func_std,args,arg,rv,data)
 /* convert radians to degrees */
 static FUNCTION(func_deg,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
+	
 	*rv = arg[0]*DEGREES_PER_RADIAN;
 	return 0;
 }
@@ -318,6 +381,9 @@ static FUNCTION(func_deg,args,arg,rv,data)
 /* convert degrees to radians */
 static FUNCTION(func_rad,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
+	
 	*rv = arg[0]*RADIANS_PER_DEGREE;
 	return 0;
 }
@@ -327,6 +393,9 @@ static FUNCTION(func_fact,args,arg,rv,data)
 {
 	double x, f = 1.0;
 	int n;
+	
+	(void)args;
+	(void)data;
 	
 	x = arg[0];
 	if(x < 0.0)
@@ -351,6 +420,9 @@ static FUNCTION(func_fact,args,arg,rv,data)
 /* sign of x */
 static FUNCTION(func_sign,args,arg,rv,data)
 {
+	(void)args;
+	(void)data;
+	
 	if(arg[0] < 0.0)
 		*rv = -1.0;
 	else
