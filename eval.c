@@ -473,35 +473,19 @@ static Token pull_token(char *buf, int *pos)
 		if(isdigit(buf[i]) || buf[i] == '.') /* numeric literal */
 		{
 			/* convert simple decimal number to fp value */
-			j = 0;
-			while(isdigit(buf[i]))
+			char* end_ptr;
+			size_t len;
+			tok.value = strtod(buf + i, &end_ptr);
+			len = end_ptr - (buf + i);
+			if(len < 100)
 			{
-				if(j < 100) tbuf[j++] = buf[i];
-				i++;
+				tok.str = copy_str(buf + i, len);
+				tok.type = 'n';
+				i += len;
 			}
-			if(buf[i] == '.')
-			{
-				if(j < 100) tbuf[j++] = '.';
-				i++;
-				while(isdigit(buf[i]))
-				{
-					if(j < 100) tbuf[j++] = buf[i];
-					i++;
-				}
-			}
-			tbuf[j] = '\0';
-			if(j == 100)
-				G_eval_error = EVAL_BAD_LITERAL;
 			else
 			{
-				if(tok.str == NULL)
-					G_eval_error = EVAL_MEM_ERROR;
-				else
-				{
-					tok.str = copy_str(tbuf, 0);
-					tok.value = strtod(tbuf, NULL);
-					tok.type = 'n';
-				}
+				G_eval_error = EVAL_BAD_LITERAL;
 			}
 		}else if(isalpha(buf[i]) || buf[i] == '_') /* variable name */
 		{
