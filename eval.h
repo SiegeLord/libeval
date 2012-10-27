@@ -54,4 +54,7 @@ void eval_info(int *version, int *revision, int *buildno,
 /* interpret an error code returned by eval_expr as a human readable string */
 const char *eval_error(int err);
 
+/* setup the default functions and variables */
+int eval_set_default_env(void);
+
 #endif

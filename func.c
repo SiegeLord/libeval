@@ -4,7 +4,6 @@
 #include <stdlib.h>
 
 #include "eval.h"
-#include "func.h"
 
 /* compare two doubles, return -1 if v1 < v2, 1 if v1 > v2, 0 if v1 = v2 */
 static int dcomp(const void *v1, const void *v2)
@@ -457,18 +456,19 @@ static int fnargs[] =
 	-1, -1, -1, -1, -1, -1, -1, 1, 1, 1, 1, 0
 };
 
-int set_funcs(void)
+int eval_set_default_env(void)
 {
 	int i;
-	static int done = 0;
-	
-	if(done)
-		return 0;
-	done = 1;
 	
 	for(i = 0; fnname[i] != NULL; i++)
 		if(eval_def_fn(fnname[i], fn[i], NULL, fnargs[i]))
 			return 1;
+	
+	if(eval_set_var("pi", PI))
+		return 1;
+	
+	if(eval_set_var("e", exp(1)))
+		return 1;
 	
 	return 0;
 }

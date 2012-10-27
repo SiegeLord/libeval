@@ -15,7 +15,7 @@ DLIB=$(DLLNAMEVRB)
 LIBS=$(ALIB) $(DLIB)
 OBJS=eval.o func.o hashtable.o
 SRCS=eval.c func.c hashtable.c
-HDRS=eval.h func.h hashtable.h
+HDRS=eval.h hashtable.h
 
 AR=ar
 RM=rm -f
@@ -59,7 +59,7 @@ eval.o: eval.c eval.h package_date.h
 	@echo "building eval.o"
 	@$(MKOBJ) eval.c
 
-func.o: func.c func.h
+func.o: func.c
 	@echo "building standard functions"
 	@$(MKOBJ) func.c
 

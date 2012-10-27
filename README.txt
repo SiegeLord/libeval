@@ -8,7 +8,7 @@ OVERVIEW
   Design class before they showed you how this aught to be done).
 
   Libeval accepts the basic arithmetic operators: add (+), subtract (-),
-  multiply (*), divide (/), modulo divide (%), exponent (^), grouping (()),
+  multiply (*), divide (/), modulo divide (\), exponent (^), grouping (()),
   function evaluation (()), sign change (+-), percentages (%), numeric
   literal values and scaler variables.
 
@@ -56,7 +56,8 @@ OVERVIEW
   that number of parameters. If you specify a -1 (negative one) for the number
   of arguments, the function can be called with any number of parameters.
   
-  The following functions are predefined:
+  The following functions and constants can are predefined when 
+  eval_set_default_env() is called:
   
     abs(x)      absolute value of x
     sign(x)     sign of x (1.0 or -1.0)
@@ -100,6 +101,9 @@ OVERVIEW
     med(...)    median of arguments
     var(...)    variance of arguments
     std(...)    standard deviation of arguments
+    
+    pi          3.1415...
+    e           2.7182...
 
   Finally, you can get a set of bookkeepping information about the libeval
   libray with the eval_info() function. eval_info() takes nine parmaeters:

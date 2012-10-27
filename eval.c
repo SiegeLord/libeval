@@ -57,7 +57,6 @@ static char *G_license = "libeval license: GNU Lesser General Public License (LG
 #include <stdio.h>
 
 #include "hashtable.h"
-#include "func.h"
 #include "eval.h"
 
 #ifdef EVAL_DEBUG
@@ -222,8 +221,6 @@ int eval_set_var(char *name, double value)
 {
 	VarFn *var;
 	
-	set_funcs();
-	
 	if(G_varfn_table == NULL)
 	{ /* allocate the var table */
 		G_varfn_table = ht_create(500, vhash, vcomp, NULL, vdel);
@@ -252,8 +249,6 @@ int eval_get_var(char *name, double *value)
 {
 	VarFn *var;
 	
-	set_funcs();
-	
 	if(G_varfn_table == NULL)
 	{ /* allocate the var table */
 		G_varfn_table = ht_create(500, vhash, vcomp, NULL, vdel);
@@ -274,8 +269,6 @@ int eval_get_var(char *name, double *value)
 int eval_def_fn(char *name, FunctionPtr fn, void *data, int args)
 {
 	VarFn *f;
-	
-	set_funcs();
 	
 	if(G_varfn_table == NULL)
 	{ /* allocate new fn table */
@@ -899,7 +892,6 @@ int eval(char *expr, double *result)
 	static int recurse = 0;
 	
 	recurse++;
-	set_funcs();
 	
 	if(expr == NULL)
 		return EVAL_NULL_EXPRESSION;
@@ -981,6 +973,8 @@ int main(int args, char *arg[])
 	
 	(void)args;
 	(void)arg;
+	
+	eval_set_default_env();
 	
 	do
 	{
