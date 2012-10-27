@@ -82,15 +82,15 @@ backup: clean pkg-date
 
 install: libs
 	@echo "installing libeval into $(INSTALLDIR)"
-	$(INSTALL_SRC) eval.h $(INSTALLDIR)/include
-	$(INSTALL_BIN) $(LIBNAME).a $(INSTALLDIR)/lib
-	$(INSTALL_BIN) $(DLLNAMEVRB) $(INSTALLDIR)/lib
-	$(RM) $(INSTALLDIR)/lib/$(DLLNAMEVR)
-	$(RM) $(INSTALLDIR)/lib/$(DLLNAMEV)
-	$(RM) $(INSTALLDIR)/lib/$(DLLNAME)
-	$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAMEVR)
-	$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAMEV)
-	$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAME)
+	@$(INSTALL_SRC) eval.h $(INSTALLDIR)/include
+	@$(INSTALL_BIN) $(LIBNAME).a $(INSTALLDIR)/lib
+	@$(INSTALL_BIN) $(DLLNAMEVRB) $(INSTALLDIR)/lib
+	@$(RM) $(INSTALLDIR)/lib/$(DLLNAMEVR)
+	@$(RM) $(INSTALLDIR)/lib/$(DLLNAMEV)
+	@$(RM) $(INSTALLDIR)/lib/$(DLLNAME)
+	@$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAMEVR)
+	@$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAMEV)
+	@$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAME)
 
 remove:
 	@echo "removing libeval v$(VER).$(REV).$(BLD)"
