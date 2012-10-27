@@ -1025,7 +1025,7 @@ int main(int args, char *arg[])
 			printf("\t?name           same as 'name?'\n");
 			printf("\t?               list all named vars and their values\n");
 			printf("\tQUIT/EXIT/DONE  end the program\n");
-			printf("\n\toperators: + - * / % ^ ()\n");
+			printf("\n\toperators: + - * / %% ^ ()\n");
 		}else if(p = strchr(buf, '='))
 		{ /* assign a value to a variable */
 			char *name, *expr;

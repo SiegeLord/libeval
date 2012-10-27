@@ -28,7 +28,7 @@ INSTALL_BIN=install -D -m 644
 LN=ln -s
 
 MKOBJ=$(CC) $(CCOPTS) -c
-MKEXE=$(CC) $(CCOPTS) $(LNOPTS) -o
+MKEXE=$(CC) $(CCOPTS) -o
 MKLIB=$(AR) rcs $(LIBNAME).a
 MKDLL=$(CC) $(CCOPTS) $(SOOPTS) -o
 
@@ -56,7 +56,7 @@ libs: $(OBJS) bld-date
 
 test: $(OBJS)
 	@echo "building test harness"
-	@$(MKEXE) $(TEST) -DEVAL_TEST $(SRCS)
+	@$(MKEXE) $(TEST) -DEVAL_TEST $(SRCS) $(LNOPTS)
 
 eval.o: eval.c eval.h build_date.h package_date.h ver-str
 	@echo "building eval.o"
