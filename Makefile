@@ -23,6 +23,9 @@ CC=gcc
 CCOPTS=-fPIC -DVER=$(VER) -DREV=$(REV) -DBLD=$(BLD)
 LNOPTS=-lm
 SOOPTS=-shared -Wl,-soname,$(LIBNAME)
+INSTALL_SRC=install -D
+INSTALL_BIN=install -D -m 644
+LN=ln -s
 
 MKOBJ=$(CC) $(CCOPTS) -c
 MKEXE=$(CC) $(CCOPTS) $(LNOPTS) -o
@@ -71,9 +74,9 @@ backup: clean pkg-date
 
 install: libs
 	@echo "installing libeval into $(INSTALLDIR)"
-	@$(CP) eval.h $(INSTALLDIR)/include
-	@$(CP) $(LIBNAME).a $(INSTALLDIR)/lib
-	@$(CP) $(DLLNAMEVRB) $(INSTALLDIR)/lib
+	@$(INSTALL_SRC) eval.h $(INSTALLDIR)/include
+	@$(INSTALL_BIN) $(LIBNAME).a $(INSTALLDIR)/lib
+	@$(INSTALL_BIN) $(DLLNAMEVRB) $(INSTALLDIR)/lib
 	@$(RM) $(INSTALLDIR)/lib/$(DLLNAMEVR)
 	@$(RM) $(INSTALLDIR)/lib/$(DLLNAMEV)
 	@$(RM) $(INSTALLDIR)/lib/$(DLLNAME)
@@ -92,7 +95,7 @@ remove:
 
 remove-all: remove
 	@echo "removing all revisions of libeval v$(VER)"
-	@-$(RM) $(INSTALLDIR)/lib/$(LIBNAME).$(VER).*.so
+	@$(RM) $(INSTALLDIR)/lib/$(LIBNAME).$(VER).*.so
 
 pkg-date:
 	@echo "Libeval version $(VER).$(REV).$(BLD)" > PACKAGE_DATE
