@@ -139,12 +139,14 @@ BUILD & INSTALL
 
   Other possible make targets include:
 
-    clean       delete build products (*.o, binaries, libs, etc.)
-    test        build the test shell (lets you play with eval() at the CLI)
-    backup      make a backup of the source
-    dist        make a distribution package of the source
-    remove      remove the current version of the library from the install dir
-    remove-all  remove all revision of the current version of libeval
+    all           builds the libraries and the test shell
+    clean         delete build products (*.o, binaries, libs, etc.)
+    veryclean     like clean, but also deletes some 
+    test          build the test shell (lets you play with eval() at the CLI)
+    backup        make a backup of the source
+    dist          make a distribution package of the source
+    uninstall     uninstall the current version of the library from the install dir
+    uninstall-all uninstall all revision of the current version of libeval
 
   I've only really tested this on Linux, but it ought to work on just about
   anything that supports an ANSI C compiler. You WILL have to make signifcant
