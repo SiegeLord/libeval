@@ -92,8 +92,8 @@ install: libs
 	@$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAMEV)
 	@$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAME)
 
-remove:
-	@echo "removing libeval v$(VER).$(REV).$(BLD)"
+uninstall:
+	@echo "uninstalling libeval v$(VER).$(REV).$(BLD)"
 	@$(RM) $(INSTALLDIR)/include/eval.h
 	@$(RM) $(INSTALLDIR)/lib/$(LIBNAME).a
 	@$(RM) $(INSTALLDIR)/lib/$(DLLNAME)
@@ -101,8 +101,8 @@ remove:
 	@$(RM) $(INSTALLDIR)/lib/$(DLLNAMEVR)
 	@$(RM) $(INSTALLDIR)/lib/$(DLLNAMEVRB)
 
-remove-all: remove
-	@echo "removing all revisions of libeval v$(VER)"
+uninstall-all: uninstall
+	@echo "uninstalling all revisions of libeval v$(VER)"
 	@$(RM) $(INSTALLDIR)/lib/$(LIBNAME).$(VER).*.so
 
 pkg-date: package_date.h
