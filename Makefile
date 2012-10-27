@@ -18,7 +18,7 @@ SRCS=eval.c func.c hashtable.c
 HDRS=eval.h func.h hashtable.h
 
 AR=ar
-RM=rm
+RM=rm -f
 CC=gcc
 CCOPTS=-fPIC -DVER=$(VER) -DREV=$(REV) -DBLD=$(BLD)
 LNOPTS=-lm
@@ -35,9 +35,9 @@ none:
 
 clean:
 	@echo "deleting build products"
-	@-$(RM) *.o
-	@-$(RM) $(EXES)
-	@-$(RM) $(LIBS)
+	@$(RM) *.o
+	@$(RM) $(EXES)
+	@$(RM) $(LIBS)
 
 libs: $(OBJS) bld-date
 	@echo "building libeval $(VER).$(REV).$(BLD) on $$(date)"
@@ -74,21 +74,21 @@ install: libs
 	@$(CP) eval.h $(INSTALLDIR)/include
 	@$(CP) $(LIBNAME).a $(INSTALLDIR)/lib
 	@$(CP) $(DLLNAMEVRB) $(INSTALLDIR)/lib
-	@-$(RM) $(INSTALLDIR)/lib/$(DLLNAMEVR)
-	@-$(RM) $(INSTALLDIR)/lib/$(DLLNAMEV)
-	@-$(RM) $(INSTALLDIR)/lib/$(DLLNAME)
+	@$(RM) $(INSTALLDIR)/lib/$(DLLNAMEVR)
+	@$(RM) $(INSTALLDIR)/lib/$(DLLNAMEV)
+	@$(RM) $(INSTALLDIR)/lib/$(DLLNAME)
 	@$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAMEVR)
 	@$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAMEV)
 	@$(LN) $(INSTALLDIR)/lib/$(DLLNAMEVRB) $(INSTALLDIR)/lib/$(DLLNAME)
 
 remove:
 	@echo "removing libeval v$(VER).$(REV).$(BLD)"
-	@-$(RM) $(INSTALLDIR)/include/eval.h
-	@-$(RM) $(INSTALLDIR)/lib/$(LIBNAME).a
-	@-$(RM) $(INSTALLDIR)/lib/$(DLLNAME)
-	@-$(RM) $(INSTALLDIR)/lib/$(DLLNAMEV)
-	@-$(RM) $(INSTALLDIR)/lib/$(DLLNAMEVR)
-	@-$(RM) $(INSTALLDIR)/lib/$(DLLNAMEVRB)
+	@$(RM) $(INSTALLDIR)/include/eval.h
+	@$(RM) $(INSTALLDIR)/lib/$(LIBNAME).a
+	@$(RM) $(INSTALLDIR)/lib/$(DLLNAME)
+	@$(RM) $(INSTALLDIR)/lib/$(DLLNAMEV)
+	@$(RM) $(INSTALLDIR)/lib/$(DLLNAMEVR)
+	@$(RM) $(INSTALLDIR)/lib/$(DLLNAMEVRB)
 
 remove-all: remove
 	@echo "removing all revisions of libeval v$(VER)"
