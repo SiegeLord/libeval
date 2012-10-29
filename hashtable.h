@@ -30,9 +30,9 @@ typedef struct hashtable_struct hashtable;
 ** function is called when a value must be deleted. The ht_create() function
 ** returns a pointer to an empty hashtable on success, NULL on failure. */
 hashtable *ht_create(unsigned long p_size,
-	unsigned int (*p_hash)(void *key),
-	int (*p_comp)(void *key1,void *key2),
-	void (*p_kdel)(void *key),
+	unsigned int (*p_hash)(const void *key),
+	int (*p_comp)(const void *key1,const void *key2),
+	void (*p_kdel)(const void *key),
 	void (*p_vdel)(void *val));
 
 /* delete the entire table, calling the kdel and vdel functions
@@ -42,14 +42,14 @@ void ht_delete(hashtable *p_ht);
 
 /* insert key and value into table, return 0 (zero) on success,
 ** non-zero otherwise */
-int ht_insert(hashtable *p_ht, void *p_key, void *p_val);
+int ht_insert(hashtable *p_ht, const void *p_key, void *p_val);
 
 /* remove key and value from table, return 0 (zero) on success,
 ** non-zero otherwise */
-int ht_remove(hashtable *p_ht, void *p_key, void **p_val);
+int ht_remove(hashtable *p_ht, const void *p_key, void **p_val);
 
 /* lookup key in table, return 0 (zero) if found, non-zero otherwise */
-int ht_lookup(hashtable *p_ht, void *p_key, void **p_val);
+int ht_lookup(hashtable *p_ht, const void *p_key, void **p_val);
 
 /* iterate over the entries in the hashtable calling the provided function
 ** (p_func) for each entry. The p_func() function takes three parameters:
@@ -58,6 +58,6 @@ int ht_lookup(hashtable *p_ht, void *p_key, void **p_val);
 ** parameter will be set to the value returned by p_func. The ht_iterate()
 ** function returns 0 (zero) on success, non-zero on failure. */
 int ht_iterate(hashtable *p_ht, int (*p_func)(unsigned long slot,
-	void *key, void *val), int *p_rv);
+	const void *key, void *val), int *p_rv);
 
 #endif

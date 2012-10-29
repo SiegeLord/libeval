@@ -142,7 +142,7 @@ typedef struct
 } VarFn;
 
 /* create a new variable structure with the given name and value */
-static VarFn *create_var(char *name, double value)
+static VarFn *create_var(const char *name, double value)
 {
 	VarFn *vf;
 	
@@ -160,7 +160,7 @@ static VarFn *create_var(char *name, double value)
 }
 
 /* create a new function structure with the given name, pointer and args */
-static VarFn *create_fn(char *name, FunctionPtr fn, int args, void *data)
+static VarFn *create_fn(const char *name, FunctionPtr fn, int args, void *data)
 {
 	VarFn *vf;
 	
@@ -181,7 +181,7 @@ static hashtable *G_varfn_table = NULL;
 static int G_var_count = 0;
 
 /* compute hash code based on up to the first 32 bytes of the key string */
-static unsigned int vhash(void *key)
+static unsigned int vhash(const void *key)
 {
 	char *k;
 	int i, h = 0;
@@ -196,7 +196,7 @@ static unsigned int vhash(void *key)
 }
 
 /* compare two key strings, allowing NULLs */
-static int vcomp(void *key1, void *key2)
+static int vcomp(const void *key1, const void *key2)
 {
 	if(key1 == NULL && key2 == NULL)
 		return 0;
@@ -217,7 +217,7 @@ static void vdel(void *val)
 }
 
 /* public: variable access (set) function */
-int eval_set_var(char *name, double value)
+int eval_set_var(const char *name, double value)
 {
 	VarFn *var;
 	
@@ -245,7 +245,7 @@ int eval_set_var(char *name, double value)
 }
 
 /* public: variable access (get) function */
-int eval_get_var(char *name, double *value)
+int eval_get_var(const char *name, double *value)
 {
 	VarFn *var;
 	
@@ -266,7 +266,7 @@ int eval_get_var(char *name, double *value)
 	return 0;
 }
 
-int eval_def_fn(char *name, FunctionPtr fn, void *data, int args)
+int eval_def_fn(const char *name, FunctionPtr fn, void *data, int args)
 {
 	VarFn *f;
 	
@@ -296,7 +296,7 @@ int eval_def_fn(char *name, FunctionPtr fn, void *data, int args)
 }
 
 /* make a malloc()'d copy of a string, up to lim chars, full strlen if lim<1 */
-static char *copy_str(char *str, int lim)
+static char *copy_str(const char *str, int lim)
 {
 	int len;
 	char *s;
@@ -373,7 +373,7 @@ static char *G_eval_err_str[11] = {
 **    ')' = close parenthesis (end grouping or function call)
 **    ',' = comma (argument delimiter)
 */
-static Token pull_token(char *buf, int *pos)
+static Token pull_token(const char *buf, int *pos)
 {
 	char tbuf[101];
 	Token tok;
@@ -535,14 +535,14 @@ static int push_token(Token tok)
 	return 0;
 }
 
-static double eval_expr(char *buf, int *pos); /* expr = term+expr | term-expr | term */
-static double eval_term(char *buf, int *pos); /* term = fact*term | fact/term | fact%term | fact */
-static double eval_fact(char *buf, int *pos); /* fact = item^fact | item */
-static double eval_item(char *buf, int *pos); /* item = -item | +item | int | var | fn(args) | (expr) */
-static int eval_args(char *buf, int *pos, int *args, double **arg,
+static double eval_expr(const char *buf, int *pos); /* expr = term+expr | term-expr | term */
+static double eval_term(const char *buf, int *pos); /* term = fact*term | fact/term | fact%term | fact */
+static double eval_fact(const char *buf, int *pos); /* fact = item^fact | item */
+static double eval_item(const char *buf, int *pos); /* item = -item | +item | int | var | fn(args) | (expr) */
+static int eval_args(const char *buf, int *pos, int *args, double **arg,
 	int *arglen, int argpos); /* args = expr | expr,args */
 
-static double eval_expr(char *buf, int *pos) /* expr = term+expr | term-expr | term */
+static double eval_expr(const char *buf, int *pos) /* expr = term+expr | term-expr | term */
 {
 	double rv = 0.0, lhs, rhs;
 	Token tok;
@@ -596,7 +596,7 @@ static double eval_expr(char *buf, int *pos) /* expr = term+expr | term-expr | t
 	return rv;
 }
 
-static double eval_term(char *buf, int *pos) /* term = fact*term | fact/term | fact */
+static double eval_term(const char *buf, int *pos) /* term = fact*term | fact/term | fact */
 {
 	double rv = 0.0, lhs, rhs;
 	Token tok;
@@ -658,7 +658,7 @@ static double eval_term(char *buf, int *pos) /* term = fact*term | fact/term | f
 	return rv;
 }
 
-static double eval_fact(char *buf, int *pos) /* fact = item^fact | item */
+static double eval_fact(const char *buf, int *pos) /* fact = item^fact | item */
 {
 	double rv = 0.0, lhs, rhs;
 	Token tok;
@@ -696,7 +696,7 @@ static double eval_fact(char *buf, int *pos) /* fact = item^fact | item */
 	return rv;
 }
 
-static double eval_item(char *buf, int *pos) /* item = -item | +item | int | var | (expr) */
+static double eval_item(const char *buf, int *pos) /* item = -item | +item | int | var | (expr) */
 {
 	double rv = 0.0;
 	void *data;
@@ -816,7 +816,7 @@ static double eval_item(char *buf, int *pos) /* item = -item | +item | int | var
 	return rv;
 }
 
-static int eval_args(char *buf, int *pos, int *args, double **arg,
+static int eval_args(const char *buf, int *pos, int *args, double **arg,
 	int *arglen, int argpos) /* args = expr,args | expr | */
 {
 	double *tmp;
@@ -885,7 +885,7 @@ static int eval_args(char *buf, int *pos, int *args, double **arg,
 }
 
 /* public: expression evaluation function */
-int eval(char *expr, double *result)
+int eval(const char *expr, double *result)
 {
 	double rv = 0.0;
 	int pos = 0;
@@ -947,7 +947,7 @@ const char *eval_error(int err)
 
 #include <stdio.h>
 
-static int iter(unsigned long slot, void *key, void *val)
+static int iter(unsigned long slot, const void *key, void *val)
 {
 	VarFn *vf;
 	

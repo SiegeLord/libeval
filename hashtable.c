@@ -37,7 +37,7 @@ struct hashbucket_struct
 {
 	int tag;
 	struct hashbucket_struct *link;
-	void *key;
+	const void *key;
 	void *val;
 };
 
@@ -65,9 +65,9 @@ struct hashtable_struct
 	int tag;
 	unsigned long size;
 	struct hashbucket_struct **table;
-	unsigned int (*hash)(void *key);
-	int (*comp)(void *key1, void *key2);
-	void (*kdel)(void *key);
+	unsigned int (*hash)(const void *key);
+	int (*comp)(const void *key1, const void *key2);
+	void (*kdel)(const void *key);
 	void (*vdel)(void *val);
 	struct hashbucket_struct *pool;
 	struct hashblock_struct *blocks;
@@ -98,9 +98,9 @@ struct hashtable_struct
 **
 ** returns a valid hashtable pointer on success, NULL on failure */
 hashtable *ht_create(unsigned long p_size,
-	unsigned int (*p_hash)(void *key),
-	int (*p_comp)(void *key1, void *key2),
-	void (*p_kdel)(void *key),
+	unsigned int (*p_hash)(const void *key),
+	int (*p_comp)(const void *key1, const void *key2),
+	void (*p_kdel)(const void *key),
 	void (*p_vdel)(void *val))
 {
 	hashtable *ht = NULL;
@@ -218,7 +218,7 @@ void ht_delete(hashtable *p_ht)
 				hbkt = p_ht->old_table[i];
 				while(hbkt != NULL)
 				{
-					p_ht->vdel(hbkt->key);
+					p_ht->vdel(hbkt->val);
 					hbkt = hbkt->link;
 				}
 			}
@@ -257,7 +257,7 @@ void ht_delete(hashtable *p_ht)
 ** if any found). Returns 0 (zero) on success, positive non-zero on
 ** failure and negative one (-1) when no bucket was found (but a slot
 ** has been selected) */
-static int lookup(hashtable *p_ht, void *p_key, void **p_val,
+static int lookup(hashtable *p_ht, const void *p_key, void **p_val,
 	struct hashbucket_struct ***p_slot,
 	struct hashbucket_struct **p_bucket,
 	struct hashbucket_struct **p_previous)
@@ -319,7 +319,7 @@ static int lookup(hashtable *p_ht, void *p_key, void **p_val,
 
 /* insert key and value into the hash table or update an existing key/value
 ** pair if the key is already in the table with another value */
-int ht_insert(hashtable *p_ht, void *p_key, void *p_val)
+int ht_insert(hashtable *p_ht, const void *p_key, void *p_val)
 {
 	struct hashbucket_struct *hb = NULL, **slot = NULL;
 	
@@ -391,7 +391,7 @@ int ht_insert(hashtable *p_ht, void *p_key, void *p_val)
 
 /* remove a key/value pair from the hashtable, return 0 (zero) on success,
 ** non-zero on failure */
-int ht_remove(hashtable *p_ht, void *p_key, void **p_val)
+int ht_remove(hashtable *p_ht, const void *p_key, void **p_val)
 {
 	struct hashbucket_struct *hb, *prev, **slot;
 	
@@ -436,7 +436,7 @@ int ht_remove(hashtable *p_ht, void *p_key, void **p_val)
 
 /* lookup a key in the hashtable, return the corresponding value in p_val
 ** (if any found). Returns 0 (zero) on success, non-zero on failure */
-int ht_lookup(hashtable *p_ht, void *p_key, void **p_val)
+int ht_lookup(hashtable *p_ht, const void *p_key, void **p_val)
 {
 	struct hashbucket_struct *hb;
 	
@@ -459,7 +459,7 @@ int ht_lookup(hashtable *p_ht, void *p_key, void **p_val)
 
 /* apply a user-supplied function to each entry in the hashtable */
 int ht_iterate(hashtable *p_ht, int (*p_func)(unsigned long slot,
-	void *key, void *val), int *p_rv)
+	const void *key, void *val), int *p_rv)
 {
 	size_t i;
 	int rv = 0;
@@ -526,7 +526,7 @@ int ht_iterate(hashtable *p_ht, int (*p_func)(unsigned long slot,
 
 #include <stdio.h>
 
-unsigned int hash(void *p_key)
+unsigned int hash(const void *p_key)
 {
 	int i;
 	char *key;
@@ -540,7 +540,7 @@ unsigned int hash(void *p_key)
 	return hc;
 }
 
-int comp(void *p_key1, void *p_key2)
+int comp(const void *p_key1, const void *p_key2)
 {
 	if(p_key1 == NULL && p_key2 != NULL)
 		return -9999;
@@ -551,7 +551,7 @@ int comp(void *p_key1, void *p_key2)
 	return strcasecmp((char*)p_key1, (char*)p_key2);
 }
 
-void kdel(void *p_key)
+void kdel(const void *p_key)
 {
 	return;
 }
@@ -570,7 +570,7 @@ static char key[ENTRIES][8];
 static int value[ENTRIES], del[ENTRIES];
 static int iteration = 0;
 
-int iter(unsigned long slot, void *p_key, void *p_val)
+int iter(unsigned long slot, const void *p_key, void *p_val)
 {
 	int i;
 	

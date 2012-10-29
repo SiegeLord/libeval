@@ -21,10 +21,10 @@
 #define EVAL_EXPR_H
 
 /* set a named variable used by the eval() function */
-int eval_set_var(char *name, double value);
+int eval_set_var(const char *name, double value);
 
 /* get the value of a named variable as used by eval() */
-int eval_get_var(char *name, double *value);
+int eval_get_var(const char *name, double *value);
 
 /* the FUNCTION() macro is used to declare user-defined functions that can
 ** be passed to eval_def_fn() for inclusion in the evaluation environment.
@@ -35,7 +35,7 @@ int eval_get_var(char *name, double *value);
 typedef FUNCTION((*FunctionPtr),args,arg,rv,data);
 
 /* define a function for use by eval() */
-int eval_def_fn(char *name, FunctionPtr fn, void *data, int args);
+int eval_def_fn(const char *name, FunctionPtr fn, void *data, int args);
 
 /* evaluate an arithmetic expression consisting of numeric literals,
 ** named variables, addition (+), subtraction (-), multiplication (*),
@@ -44,7 +44,7 @@ int eval_def_fn(char *name, FunctionPtr fn, void *data, int args);
 ** is passed as a standard C string in the expr parameter. The evaluated
 ** value is saved into the result parameter. The function returns 0 (zero)
 ** on success, non-zero on error */
-int eval(char *expr, double *result);
+int eval(const char *expr, double *result);
 
 /* return information about the expression evaluator, copyright, auther, etc. */
 void eval_info(int *version, int *revision, int *buildno,
