@@ -348,7 +348,7 @@ static int G_eval_error = 0;
 #define MIN_ERR_VALUE 0
 #define MAX_ERR_VALUE 10
 static char *G_eval_err_str[11] = {
-	"No Error", "Syntax Error", "Divide By Zero", "Unkown Name",
+	"No Error", "Syntax Error", "Divide By Zero", "Unknown Name",
 	"Bad Literal Value", "Error Allocating Memory", "Integer Convert Error",
 	"Missing Close Parentheses", "NULL Expression String",
 	"Error in Function Evaluation", "Invalid Argument Count"
