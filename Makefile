@@ -10,7 +10,7 @@ DLLNAMEVRB=$(DLLNAMEVR).$(BLD)
 
 TEST=eval_test
 EXES=$(TEST)
-ALIB=$(LIBNAME).a
+ALIB=$(LIBNAME)-static.a
 DLIB=$(DLLNAMEVRB)
 LIBS=$(ALIB) $(DLIB)
 OBJS=eval.o func.o hashtable.o
